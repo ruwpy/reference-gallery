@@ -1,0 +1,1 @@
+type OauthAccountType = "youtube";

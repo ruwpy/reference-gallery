@@ -1,0 +1,48 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1711036212395,
+      "tag": "0000_silky_stone_men",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1711197279895,
+      "tag": "0001_curved_amazoness",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1711226000457,
+      "tag": "0002_busy_ravenous",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1711229211434,
+      "tag": "0003_happy_peter_quill",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1711285538097,
+      "tag": "0004_complete_invisible_woman",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1711293524455,
+      "tag": "0005_shocking_thanos",
+      "breakpoints": true
+    }
+  ]
+}
