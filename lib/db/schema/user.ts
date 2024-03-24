@@ -1,6 +1,5 @@
 import { relations } from "drizzle-orm";
 import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
-import { project } from "./project";
 import { usersToProjects } from "./user-to-project";
 
 export type DatabaseUser = typeof user.$inferInsert;
