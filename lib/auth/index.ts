@@ -58,6 +58,6 @@ export const google = new Google(
   env.GOOGLE_CLIENT_ID,
   env.GOOGLE_CLIENT_SECRET,
   process.env.NODE_ENV === "production"
-    ? "https://estra.stream/api/login/google/callback"
+    ? "https://r-gallery.vercel.app/api/login/google/callback"
     : "http://localhost:3000/api/login/google/callback"
 );
