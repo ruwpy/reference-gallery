@@ -14,7 +14,7 @@ export const createImageUploadURL = async ({ filename }: { filename: string }) =
     const client = new S3({
       region: "eu-north-1",
       credentials: {
-        accessKeyId: env.AWS_ACCESS_KEY,
+        accessKeyId: env.AWS_ACCESS_KEY_ID,
         secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
       },
       endpoint: "https://s3.eu-north-1.amazonaws.com",
