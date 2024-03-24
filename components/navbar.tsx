@@ -1,7 +1,6 @@
 import { validateRequest } from "@/lib/auth";
 import { LoginButton } from "./button-login";
 import Link from "next/link";
-import { Path } from "./path";
 
 const Navbar = async () => {
   const { user } = await validateRequest();

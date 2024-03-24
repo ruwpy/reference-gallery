@@ -1,6 +1,6 @@
 "use server";
 
-import { and, eq, isNull, not } from "drizzle-orm";
+import { and, eq, isNull } from "drizzle-orm";
 import { db } from "..";
 import { image, image as schemaImage } from "../schema/image";
 import { validateRequest } from "@/lib/auth";
@@ -51,7 +51,3 @@ export const getAllImagesFromProject = async ({ projectId }: { projectId: string
 
   return images;
 };
-
-// const addImageToFolder = async (projectId: string, imageUrl: string) => {
-//   const image = await db.insert(schemaImage).values({});
-// };

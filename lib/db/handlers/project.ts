@@ -16,9 +16,7 @@ export const createProject = async ({ userId, name }: { userId: string; name: st
     .values({ id, ownerId: userId, name: name })
     .returning();
 
-  const newUserToProjectRelation = await db
-    .insert(usersToProjects)
-    .values({ projectId: id, userId });
+  await db.insert(usersToProjects).values({ projectId: id, userId });
 
   revalidatePath("/");
 

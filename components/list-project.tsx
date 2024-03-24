@@ -1,6 +1,5 @@
 import { getProjects } from "@/lib/db/handlers/project";
 import Link from "next/link";
-import { useState } from "react";
 
 export const ProjectList = async ({ userId }: { userId: string }) => {
   const projects = (await getProjects({ userId })).reverse();

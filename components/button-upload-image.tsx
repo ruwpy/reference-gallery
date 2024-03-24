@@ -27,11 +27,7 @@ export const UploadImageButton = ({
 
       if (imageUrl) {
         try {
-          console.log(image);
-
-          console.log(imageUrl.url);
-
-          const res = await fetch(imageUrl.url, {
+          await fetch(imageUrl.url, {
             method: "PUT",
             body: image,
             headers: {

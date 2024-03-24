@@ -4,11 +4,9 @@ import { cookies } from "next/headers";
 import { OAuth2RequestError } from "arctic";
 import { generateId } from "lucia";
 
-import { user } from "@/lib/db/schema/user";
-import { and, eq, not } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { oauthAccount } from "@/lib/db/schema/oauth-account";
 import { parseJWT } from "oslo/jwt";
-import { env } from "@/env.mjs";
 import { getUserOauthAccounts, insertOauthAccount } from "@/lib/db/handlers/oauth-account";
 import { getUserByEmail, createUser } from "@/lib/db/handlers/user";
 import { generateName } from "@/lib/utils";
@@ -17,17 +15,6 @@ interface GoogleUser {
   sub: string;
   email: string;
   picture: string;
-}
-
-interface YoutubeChannelResponse {
-  items: YoutubeChannel[];
-}
-
-interface YoutubeChannel {
-  id: string;
-  snippet: {
-    title: string;
-  };
 }
 
 //@ts-ignore
