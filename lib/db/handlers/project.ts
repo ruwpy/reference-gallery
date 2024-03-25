@@ -33,3 +33,9 @@ export const getProjects = async ({ userId }: { userId: string }) => {
 
   return projects;
 };
+
+export const getProject = async ({ projectId }: { projectId: string }) => {
+  const [projectFromDb] = await db.select().from(project).where(eq(project.id, projectId));
+
+  return projectFromDb;
+};
