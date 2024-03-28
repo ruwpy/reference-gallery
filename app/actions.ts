@@ -33,8 +33,6 @@ export const createImageUploadURL = async ({ filename }: { filename: string }) =
 
     if (!contentType) return console.log("incorrect file");
 
-    console.log(contentType);
-
     const client = new S3({
       region: "eu-north-1",
       credentials: {
@@ -53,6 +51,27 @@ export const createImageUploadURL = async ({ filename }: { filename: string }) =
     const url = await getSignedUrl(client, command, { expiresIn: 3600 });
 
     return { url, name: fileName, extension: fileExtension, contentType };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteS3Object = async ({ publicObjectUrl }: { publicObjectUrl: string }) => {
+  try {
+    const objectKey = publicObjectUrl.split("/")[publicObjectUrl.split("/").length - 1];
+
+    const client = new S3({
+      region: "eu-north-1",
+      credentials: {
+        accessKeyId: env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
+      },
+      endpoint: "https://s3.eu-north-1.amazonaws.com",
+    });
+
+    console.log(objectKey);
+
+    await client.deleteObject({ Bucket: "reference-gallery-images", Key: objectKey });
   } catch (error) {
     console.log(error);
   }

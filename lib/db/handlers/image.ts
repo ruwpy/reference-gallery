@@ -5,6 +5,8 @@ import { db } from "..";
 import { image, image as schemaImage } from "../schema/image";
 import { validateRequest } from "@/lib/auth";
 import { generateId } from "lucia";
+import { getProject } from "./project";
+import { deleteS3Object } from "@/app/actions";
 
 export const addImage = async ({
   projectId,
@@ -37,6 +39,12 @@ export const addImage = async ({
   return image;
 };
 
+export const getImage = async ({ imageId }: { imageId: string }) => {
+  const [imageFromDb] = await db.select().from(image).where(eq(image.id, imageId));
+
+  return imageFromDb;
+};
+
 export const getAllImagesFromFolder = async ({ folderId }: { folderId: string }) => {
   const images = await db.select().from(image).where(eq(image.folderId, folderId));
 
@@ -50,4 +58,17 @@ export const getAllImagesFromProject = async ({ projectId }: { projectId: string
     .where(and(eq(image.projectId, projectId), isNull(image.folderId)));
 
   return images;
+};
+
+export const deleteImage = async ({ imageId, userId }: { imageId: string; userId: string }) => {
+  const imageFromDb = await getImage({ imageId });
+  const project = await getProject({ projectId: imageFromDb.projectId });
+
+  if (project.ownerId !== userId) return console.log("not auth");
+
+  const [deletedImage] = await db.delete(image).where(eq(image.id, imageId)).returning();
+
+  await deleteS3Object({ publicObjectUrl: deletedImage.url });
+
+  return deletedImage;
 };

@@ -14,3 +14,7 @@ body {
   border-left: 1px solid var(--font-color);
   border-right: 1px solid var(--font-color);
 }
+
+#folderObject:hover > span > #folderObjectDeleteButton {
+  display: inline;
+}

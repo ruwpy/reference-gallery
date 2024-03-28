@@ -36,7 +36,11 @@ export const CreateFolderButton = ({
       const name = inputValue || generateName();
 
       if (projectId) {
-        await createFolder({ projectId, name, parentFolderId: folderId });
+        await createFolder({
+          projectId,
+          name,
+          parentFolderId: folderId,
+        });
       }
 
       if (userId) {
