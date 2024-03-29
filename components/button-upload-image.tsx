@@ -25,21 +25,24 @@ export const UploadImageButton = ({
 
       if (imageData) {
         try {
+          const publicUrl = imageData.url.split("?")[0];
+
+          const image = await addImage({
+            imageUrl: publicUrl,
+            name: imageData.name,
+            projectId: projectId,
+            folderId: folderId,
+            size: file.size,
+          });
+
+          if (image === undefined) break;
+
           await fetch(imageData.url, {
             method: "PUT",
             body: file,
             headers: {
               "Content-Type": imageData.contentType,
             },
-          });
-
-          const publicUrl = imageData.url.split("?")[0];
-
-          await addImage({
-            imageUrl: publicUrl,
-            name: imageData.name,
-            projectId: projectId,
-            folderId: folderId,
           });
 
           router.refresh();
@@ -65,7 +68,7 @@ export const UploadImageButton = ({
           htmlFor="imageInput"
           className="cursor-pointer w-full h-full flex justify-center items-center"
         >
-          add image
+          upload image
         </label>
       )}
       <input

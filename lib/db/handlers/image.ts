@@ -7,21 +7,30 @@ import { validateRequest } from "@/lib/auth";
 import { generateId } from "lucia";
 import { getProject } from "./project";
 import { deleteS3Object } from "@/app/actions";
+import { getStorage, increaseUsedSpace } from "./storage";
 
 export const addImage = async ({
   projectId,
   folderId,
   name,
   imageUrl,
+  size,
 }: {
   projectId: string;
   folderId?: string;
   name: string;
   imageUrl: string;
+  size: number;
 }) => {
   const { user } = await validateRequest();
 
-  if (!user) return console.log("not auth");
+  if (!user) return undefined;
+
+  const storage = await getStorage({ userId: user.id });
+
+  if (storage!.spaceLimit <= storage!.usedSpace + size) {
+    return undefined;
+  }
 
   const id = generateId(15);
 
@@ -35,6 +44,8 @@ export const addImage = async ({
   };
 
   const image = await db.insert(schemaImage).values(values).returning();
+
+  await increaseUsedSpace({ userId: user.id, bytes: size });
 
   return image;
 };

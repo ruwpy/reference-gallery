@@ -69,8 +69,6 @@ export const deleteS3Object = async ({ publicObjectUrl }: { publicObjectUrl: str
       endpoint: "https://s3.eu-north-1.amazonaws.com",
     });
 
-    console.log(objectKey);
-
     await client.deleteObject({ Bucket: "reference-gallery-images", Key: objectKey });
   } catch (error) {
     console.log(error);

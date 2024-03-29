@@ -5,3 +5,11 @@ export const generateName = () => {
 
   return name;
 };
+
+export const roundToTwoDigits = (value: number): number => {
+  if (Number.isInteger(value)) {
+    return value;
+  }
+
+  return parseFloat(value.toFixed(2));
+};

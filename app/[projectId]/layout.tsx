@@ -1,7 +1,7 @@
 import { Path } from "@/components/path";
 import { validateRequest } from "@/lib/auth";
 import { getProject } from "@/lib/db/handlers/project";
-import { getAllProjectMembers } from "@/lib/db/handlers/usersToProjects";
+import { getAllProjectMembers } from "@/lib/db/handlers/member";
 import { notFound, redirect } from "next/navigation";
 
 const ProjectLayout = async ({

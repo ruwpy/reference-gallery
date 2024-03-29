@@ -129,6 +129,7 @@ export const FoldersNImagesList = ({
               <span className="text-[18px] bg-white p-[2px]">{i.name}</span>
             </span>
             <Image
+              unoptimized
               className="absolute cursor-pointer left-0 top-0 w-full h-full object-cover"
               src={i.url}
               width={512}

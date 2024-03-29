@@ -4,7 +4,7 @@ import { generateId } from "lucia";
 import { db } from "..";
 import { project } from "../schema/project";
 import { eq } from "drizzle-orm";
-import { usersToProjects } from "../schema/user-to-project";
+import { member } from "../schema/member";
 import { user } from "../schema/user";
 import { revalidatePath } from "next/cache";
 import { deleteFolder, getAllFoldersFromProject } from "./folder";
@@ -19,7 +19,7 @@ export const createProject = async ({ userId, name }: { userId: string; name: st
     .values({ id, ownerId: userId, name: name })
     .returning();
 
-  await db.insert(usersToProjects).values({ projectId: id, userId });
+  await db.insert(member).values({ projectId: id, userId });
 
   revalidatePath("/");
 
@@ -32,8 +32,8 @@ export const getProjects = async ({ userId }: { userId?: string }) => {
   const res = await db
     .select({ project })
     .from(project)
-    .innerJoin(usersToProjects, eq(project.id, usersToProjects.projectId))
-    .innerJoin(user, eq(user.id, usersToProjects.userId))
+    .innerJoin(member, eq(project.id, member.projectId))
+    .innerJoin(user, eq(user.id, member.userId))
     .where(eq(user.id, userId));
 
   return res.map((r) => r.project);

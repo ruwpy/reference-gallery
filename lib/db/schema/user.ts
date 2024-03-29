@@ -1,6 +1,6 @@
 import { relations } from "drizzle-orm";
 import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
-import { usersToProjects } from "./user-to-project";
+import { member } from "./member";
 
 export type DatabaseUser = typeof user.$inferInsert;
 
@@ -12,6 +12,9 @@ export const user = pgTable("user", {
   createdAt: timestamp("createdAt").defaultNow(),
 });
 
-export const userRelations = relations(user, ({ many }) => ({
-  usersToProjects: many(usersToProjects),
+export const userRelations = relations(user, ({ one }) => ({
+  members: one(member, {
+    fields: [user.id],
+    references: [member.userId],
+  }),
 }));

@@ -3,17 +3,17 @@
 import { eq } from "drizzle-orm";
 import { db } from "..";
 import { project } from "../schema/project";
-import { usersToProjects } from "../schema/user-to-project";
+import { member } from "../schema/member";
 
 export const getAllProjectMembers = async ({ projectId }: { projectId: string }) => {
   const projectFromDb = await db
-    .select({ usersToProjects })
+    .select({ member })
     .from(project)
-    .innerJoin(usersToProjects, eq(project.id, usersToProjects.projectId))
-    .where(eq(usersToProjects.projectId, projectId));
+    .innerJoin(member, eq(project.id, member.projectId))
+    .where(eq(member.projectId, projectId));
 
   return projectFromDb.map((p) => ({
-    userId: p.usersToProjects.userId,
-    projectId: p.usersToProjects.projectId,
+    userId: p.member.userId,
+    projectId: p.member.projectId,
   }));
 };
