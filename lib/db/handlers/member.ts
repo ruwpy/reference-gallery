@@ -36,7 +36,8 @@ export const addMemberToProject = async ({
 
   const [userFromDb] = await db.select().from(user).where(eq(user.email, memberEmail));
 
-  const isAlreadyMember = members.filter((m) => m.userId === userFromDb.email);
+  const isAlreadyMember = Boolean(members.filter((m) => m.userId === userFromDb.email)[0]);
+
   if (isAlreadyMember) return undefined;
 
   const newMember = await db
