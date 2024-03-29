@@ -7,7 +7,7 @@ import {
   projectSchema,
   sessionSchema,
   userSchema,
-  userToProjectSchema,
+  memberSchema,
 } from "./schema/index";
 import postgres from "postgres";
 
@@ -21,6 +21,6 @@ export const db = drizzle(queryClient, {
     ...projectSchema,
     ...sessionSchema,
     ...userSchema,
-    ...userToProjectSchema,
+    ...memberSchema,
   },
 });

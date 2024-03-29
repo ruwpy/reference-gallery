@@ -3,8 +3,8 @@ import { user } from "./user";
 import { project } from "./project";
 import { relations } from "drizzle-orm";
 
-export const usersToProjects = pgTable(
-  "users_to_projects",
+export const member = pgTable(
+  "member",
   {
     userId: text("user_id")
       .notNull()
@@ -18,13 +18,13 @@ export const usersToProjects = pgTable(
   })
 );
 
-export const usersToProjectsRelations = relations(usersToProjects, ({ one }) => ({
+export const memberRelations = relations(member, ({ one }) => ({
   project: one(project, {
-    fields: [usersToProjects.projectId],
+    fields: [member.projectId],
     references: [project.id],
   }),
   user: one(user, {
-    fields: [usersToProjects.userId],
+    fields: [member.userId],
     references: [user.id],
   }),
 }));

@@ -1,50 +1,36 @@
 "use client";
 
-import { createFolder } from "@/lib/db/handlers/folder";
-import { createProject } from "@/lib/db/handlers/project";
-import { generateName } from "@/lib/utils";
+import { addMemberToProject } from "@/lib/db/handlers/member";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface CreateFolderButtonProps {
-  children?: React.ReactNode;
-  userId?: string;
+  userId: string;
   projectId?: string;
-  folderId?: string;
 }
 
-export const CreateFolderButton = ({
-  userId,
-  projectId,
-  folderId,
-  children,
-}: CreateFolderButtonProps) => {
-  const [isCreating, setCreating] = useState(false);
+export const AddMemberButton = ({ userId, projectId }: CreateFolderButtonProps) => {
+  const [isAdding, setAdding] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setLoading] = useState(false);
 
   const router = useRouter();
 
   const discard = () => {
-    setCreating(false);
+    setAdding(false);
     setInputValue("");
   };
 
   const confirm = async () => {
     try {
       setLoading(true);
-      const name = inputValue || generateName();
 
       if (projectId) {
-        await createFolder({
+        await addMemberToProject({
           projectId,
-          name,
-          parentFolderId: folderId,
+          userId,
+          memberEmail: inputValue,
         });
-      }
-
-      if (userId) {
-        await createProject({ userId, name });
       }
 
       discard();
@@ -60,22 +46,22 @@ export const CreateFolderButton = ({
   return (
     <>
       <div className="flex flex-col flex-grow border-b border-[var(--font-color)]">
-        {isCreating ? (
+        {isAdding ? (
           <input
             className="h-[40px] w-full text-center focus:outline-none"
             type="text"
-            placeholder={`enter name of the ${projectId ? "folder" : "project"} or leave it blank`}
-            maxLength={48}
+            placeholder={`enter email`}
+            maxLength={320}
             onChange={(e) => setInputValue(e.target.value)}
             value={inputValue}
           />
         ) : (
-          <button className="h-[40px]" onClick={() => setCreating(true)}>
-            {children}
+          <button className="h-[40px]" onClick={() => setAdding(true)}>
+            add member
           </button>
         )}
       </div>
-      {isCreating && (
+      {isAdding && (
         <div className="flex border-b border-[var(--font-color)]">
           <button
             disabled={isLoading}

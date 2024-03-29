@@ -5,21 +5,32 @@ import { db } from "..";
 import { image, image as schemaImage } from "../schema/image";
 import { validateRequest } from "@/lib/auth";
 import { generateId } from "lucia";
+import { getProject } from "./project";
+import { deleteS3Object } from "@/app/actions";
+import { getStorage, increaseUsedSpace } from "./storage";
 
 export const addImage = async ({
   projectId,
   folderId,
   name,
   imageUrl,
+  size,
 }: {
   projectId: string;
   folderId?: string;
   name: string;
   imageUrl: string;
+  size: number;
 }) => {
   const { user } = await validateRequest();
 
-  if (!user) return console.log("not auth");
+  if (!user) return undefined;
+
+  const storage = await getStorage({ userId: user.id });
+
+  if (storage!.spaceLimit <= storage!.usedSpace + size) {
+    return undefined;
+  }
 
   const id = generateId(15);
 
@@ -34,7 +45,15 @@ export const addImage = async ({
 
   const image = await db.insert(schemaImage).values(values).returning();
 
+  await increaseUsedSpace({ userId: user.id, bytes: size });
+
   return image;
+};
+
+export const getImage = async ({ imageId }: { imageId: string }) => {
+  const [imageFromDb] = await db.select().from(image).where(eq(image.id, imageId));
+
+  return imageFromDb;
 };
 
 export const getAllImagesFromFolder = async ({ folderId }: { folderId: string }) => {
@@ -50,4 +69,17 @@ export const getAllImagesFromProject = async ({ projectId }: { projectId: string
     .where(and(eq(image.projectId, projectId), isNull(image.folderId)));
 
   return images;
+};
+
+export const deleteImage = async ({ imageId, userId }: { imageId: string; userId: string }) => {
+  const imageFromDb = await getImage({ imageId });
+  const project = await getProject({ projectId: imageFromDb.projectId });
+
+  if (project.ownerId !== userId) return console.log("not auth");
+
+  const [deletedImage] = await db.delete(image).where(eq(image.id, imageId)).returning();
+
+  await deleteS3Object({ publicObjectUrl: deletedImage.url });
+
+  return deletedImage;
 };
